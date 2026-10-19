@@ -34,6 +34,18 @@ function formatDate(value) {
 }
 
 /**
+ * Date for Ukrainian readers (invoices, reminder mails): DD.MM.YYYY.
+ * formatDate above stays MM/DD/YYYY on purpose: the accounting export
+ * reads it through config/export-columns.json (type "Date").
+ */
+function formatDateUA(value) {
+  if (!value) return '';
+  var d = toDate(value);
+  if (isNaN(d.getTime())) return '';
+  return pad(d.getUTCDate()) + '.' + pad(d.getUTCMonth() + 1) + '.' + d.getUTCFullYear();
+}
+
+/**
  * Money for people: 123450 -> "1 234,50 грн".
  * Amounts are integer kopecks everywhere (never floats!).
  */
@@ -75,6 +87,7 @@ function formatPercent(value) {
 
 module.exports = {
   formatDate: formatDate,
+  formatDateUA: formatDateUA,
   formatMoney: formatMoney,
   formatDecimal: formatDecimal,
   formatText: formatText,

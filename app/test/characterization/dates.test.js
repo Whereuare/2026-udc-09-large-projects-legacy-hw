@@ -58,7 +58,14 @@ test('formatDate today: MM/DD/YYYY (the function the ticket is about)', function
   assert.equal(format.formatDate('not a date'), '');
 });
 
-test('invoice HTML over HTTP (GET /invoices/:number) prints MM/DD/YYYY dates', function (t, done) {
+test('formatDateUA: DD.MM.YYYY for people', function () {
+  assert.equal(format.formatDateUA('2026-03-09'), '09.03.2026');
+  assert.equal(format.formatDateUA('2026-12-03'), '03.12.2026');
+  assert.equal(format.formatDateUA(''), '');
+  assert.equal(format.formatDateUA('not a date'), '');
+});
+
+test('invoice HTML over HTTP (GET /invoices/:number) prints DD.MM.YYYY dates', function (t, done) {
   var server = createServer();
   server.listen(0, function () {
     get(server, '/invoices/INV-2026-00007', function (err, status, body) {
@@ -66,7 +73,7 @@ test('invoice HTML over HTTP (GET /invoices/:number) prints MM/DD/YYYY dates', f
       assert.ifError(err);
       assert.equal(status, 200);
       assert.equal(body.toString('utf8'), golden('invoice-INV-2026-00007.html').toString('utf8'));
-      assert.match(body.toString('utf8'), /Дата: <b>03\/07\/2026<\/b> · Сплатити до: <b>03\/21\/2026<\/b>/);
+      assert.match(body.toString('utf8'), /Дата: <b>07\.03\.2026<\/b> · Сплатити до: <b>21\.03\.2026<\/b>/);
       done();
     });
   });
@@ -82,14 +89,14 @@ test('invoice HTML via bin/render-invoice.js path (renderInvoiceHtml) is the sam
   });
 });
 
-test('reminder mails (upcoming + overdue) print MM/DD/YYYY due dates', function (t, done) {
+test('reminder mails (upcoming + overdue) print DD.MM.YYYY due dates', function (t, done) {
   loadAll(function (err, customers, invoices) {
     assert.ifError(err);
     var mails = reminders.buildReminders(invoices, byId(customers), '2026-03-16');
     assert.deepEqual(mails, JSON.parse(golden('reminders-2026-03-16.json').toString('utf8')));
     var kinds = mails.map(function (m) { return m.kind; });
     assert.ok(kinds.indexOf('upcoming') !== -1 && kinds.indexOf('overdue') !== -1, 'both kinds are covered');
-    mails.forEach(function (m) { assert.match(m.text, /\d\d\/\d\d\/2026/); });
+    mails.forEach(function (m) { assert.match(m.text, /\d\d\.\d\d\.2026/); });
     done();
   });
 });
