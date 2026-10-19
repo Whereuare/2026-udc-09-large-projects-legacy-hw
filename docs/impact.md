@@ -57,7 +57,7 @@ All five are in `test/characterization/dates.test.js`, golden files in
 | `reminder mails (upcoming + overdue)` | `buildReminders` on 2026-03-16 over the seeded invoices (both kinds) against `reminders-2026-03-16.json` (row 3). | yes |
 | `accounting export ... byte-for-byte` | `buildAccountingFile` over all 36 seeded invoices against `oblik-export.csv`, compared as bytes, CRLF included (row 4). | yes |
 
-`cd app && npm test`: 111 tests, 111 pass (the 106 seeded ones plus these 5).
+`cd app && npm test` at the Task B commit: 111 tests, 111 pass (the 106 seeded ones plus these 5).
 
 Sanity check that they bite: I temporarily switched `formatDate` to `DD.MM.YYYY` in
 place. Six tests failed: the five above, including the export one, and the seeded

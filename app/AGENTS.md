@@ -60,6 +60,6 @@ out loud. Verified against the code on 2026-10-19; each item points to a file.
 
 ## How to check a change
 
-`cd app && npm test` (112 tests). Before touching anything that prints a date or an
+`cd app && npm test` (115 tests). Before touching anything that prints a date or an
 amount, run `node bin/nightly-export.js 2026-03-31` before and after and diff
 `out/export/oblik-2026-03-31.csv` (delete `out/` afterwards, never commit it).
